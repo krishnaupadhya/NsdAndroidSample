@@ -79,7 +79,7 @@ class NsdMasterActivity : AppCompatActivity(), NsdRegistrationListener, SocketCo
     }
 
     override fun onPause() {
-        if (mNsdRegistrationHelper!!.isServiceRunning)
+        if (mNsdRegistrationHelper?.isServiceRunning!!)
             mNsdRegistrationHelper?.tearDown()
         super.onPause()
     }

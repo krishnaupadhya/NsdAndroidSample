@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.text.format.Formatter
 import android.util.Log
+import android.view.View
 import android.widget.Button
 
 import com.example.krishnaupadhya.nsddemo.R
@@ -77,7 +78,7 @@ class NsdSlaveActivity : AppCompatActivity(), NsdDiscoveryListener, ClientListLi
 
         try {
             jsonData.put("request", REQUEST_CONNECT_CLIENT)
-            jsonData.put("client_name", customer!!.clientDeviceName)
+            jsonData.put("client_name", customer?.clientDeviceName)
             jsonData.put("ipAddress", ipAddress)
             if (!TextUtils.isEmpty(msg_text_slave.text)) {
                 jsonData.put("message", msg_text_slave.text)
@@ -144,7 +145,11 @@ class NsdSlaveActivity : AppCompatActivity(), NsdDiscoveryListener, ClientListLi
 
     private fun updateCustomersAdapter() {
         this.runOnUiThread(java.lang.Runnable {
-            if (customerList == null || customerList!!.size == 0) return@Runnable
+            if (customerList == null || customerList!!.size == 0) {
+                customer_list.visibility = View.GONE
+                return@Runnable
+            }
+            customer_list.visibility = View.VISIBLE
             if (mClientListAdapter == null) {
                 mClientListAdapter = ClientListAdapter(customerList, this@NsdSlaveActivity)
                 customer_list.layoutManager = LinearLayoutManager(this@NsdSlaveActivity)
@@ -188,6 +193,7 @@ class NsdSlaveActivity : AppCompatActivity(), NsdDiscoveryListener, ClientListLi
             val customer = getCustomer(service.serviceName)
             if (customer != null)
                 customerList!!.remove(customer)
+            updateCustomersAdapter()
         }
     }
 
